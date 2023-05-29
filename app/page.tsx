@@ -1,8 +1,10 @@
 "use client";
 import Image from 'next/image';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback  } from 'react';
 import "../components/SingleCard"
+import Confetti from '../components/confetti';
 import SingleCard from '../components/SingleCard';
+
 
 
 
@@ -23,12 +25,23 @@ interface Card {
 }
 
 export default function Home() {
+
+
+
+
   const [cards, setCards] = useState<Card[]>([]);
   const [turns, setTurns] = useState(0);
   const [choiceOne, setChoiceOne] = useState<Card | null>(null);
   const [choiceTwo, setChoiceTwo] = useState<Card | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [disabled, setDisabled] = useState(false);
+  const [playConfetti, setPlayConfetti] = useState(false);
+
+  const handlePlayConfetti = () => {
+    setPlayConfetti(true);
+    // You can set playConfetti to false after a certain duration or trigger to stop the confetti effect
+  };
+
 
   const duplicateAndShuffleCards = () => {
     const melangeC = [...images, ...images]
@@ -101,9 +114,11 @@ export default function Home() {
     setChoiceTwo(null);
     setTurns((prevTurns) => prevTurns + 1);
     setDisabled(false)
+    setPlayConfetti(false);
   };
 
   const handleChoice = (card: Card) => {
+    setPlayConfetti(true);
     if(card.id === choiceOne?.id) return;
     if (choiceOne) {
       setChoiceTwo(card);
@@ -114,6 +129,8 @@ export default function Home() {
 
 
   return (
+    <>
+   
     <div className="p-20">
       <button onClick={duplicateAndShuffleCards} className="mb-8">New Game</button>
       <div className="cards-container" ref={containerRef}>
@@ -128,6 +145,9 @@ export default function Home() {
         ))}
       </div>
       <p> Nb essai : { turns } </p>
+      
+      <Confetti run={playConfetti} />
     </div>
+    </>
   );
 }
