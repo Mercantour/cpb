@@ -5,7 +5,7 @@ import "../components/SingleCard"
 import Confetti from '../components/confetti';
 import SingleCard from '../components/SingleCard';
 
-
+import '../components/card.css'
 
 
 const images = [
@@ -14,7 +14,14 @@ const images = [
   { src: "/m3.png"  , matched: false},
   { src: "/m4.png"  , matched: false},
   { src: "/m5.png"  , matched: false},
- 
+];
+
+const newImages = [
+  { src: "/back.png", matched: false },
+  { src: "/back1.png", matched: false },
+  { src: "/back2.png", matched: false },
+  { src: "/back3.png", matched: false },
+  { src: "/back4.png", matched: false },
 ];
 
 
@@ -28,7 +35,7 @@ export default function Home() {
 
 
 
-
+  const [currentImages, setCurrentImages] = useState(images)
   const [cards, setCards] = useState<Card[]>([]);
   const [turns, setTurns] = useState(0);
   const [choiceOne, setChoiceOne] = useState<Card | null>(null);
@@ -36,15 +43,44 @@ export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [disabled, setDisabled] = useState(false);
   const [playConfetti, setPlayConfetti] = useState(false);
+  const [matchedPairs, setMatchedPairs] = useState(0);
+  const [gameComplete, setGameComplete] = useState(false);
+  const [isAudioInitialized, setIsAudioInitialized] = useState(false);
 
-  const handlePlayConfetti = () => {
-    setPlayConfetti(true);
-    // You can set playConfetti to false after a certain duration or trigger to stop the confetti effect
+
+
+
+  useEffect(() => {
+    if (matchedPairs === images.length) {
+      handlePlayConfetti()
+      setTimeout(() => {
+        setGameComplete(false);
+        restartGame();
+      }, 2000);
+    }
+  }, [matchedPairs]);
+
+
+  const restartGame = () => {
+    // Reset all the necessary state variables to start a new game
+    setCurrentImages(newImages)
+    setPlayConfetti(false);
+    duplicateAndShuffleCards(newImages);
   };
 
 
-  const duplicateAndShuffleCards = () => {
-    const melangeC = [...images, ...images]
+  const handlePlayConfetti = (volume = 1) => {
+    setPlayConfetti(true);
+    const audio = document.getElementById("confettiAudio") as HTMLAudioElement;
+    audio.volume = volume; // Set the volume
+    audio.play();
+    // You can set playConfetti to false after a certain duration or trigger to stop the confetti effect
+  };
+
+ 
+
+  const duplicateAndShuffleCards = (imgs: { src: string; matched: boolean }[] = images) => {
+    const melangeC = [...imgs, ...imgs]
       .sort(() => Math.random() - 0.5)
       .map((card) => ({ ...card, id: Math.random() }));
 
@@ -60,30 +96,6 @@ export default function Home() {
   },[])
 
 
-  useEffect(() => {
-    const updateContainerStyles = () => {
-      if (containerRef.current) {
-        const windowWidth = window.innerWidth;
-        const gridWidth = (1 / 2) * windowWidth - 40; // Subtracting 40px to account for the padding
-
-        const numColumns = 5; // Set the number of columns to 5
-        const columnWidth = `${Math.floor(gridWidth / numColumns)}px`;
-
-        containerRef.current.style.display = 'grid';
-        containerRef.current.style.gridTemplateColumns = `repeat(${numColumns}, ${columnWidth})`;
-        containerRef.current.style.padding = '20px'; // Set consistent padding
-        containerRef.current.style.gridGap = '10px'; // Set consistent gap between pictures
-        containerRef.current.style.overflow = 'hidden'; // Hide overflow to prevent scrolling
-      }
-    };
-
-    window.addEventListener('resize', updateContainerStyles);
-    updateContainerStyles();
-
-    return () => {
-      window.removeEventListener('resize', updateContainerStyles);
-    };
-  }, []);
 
   useEffect(() => {
   
@@ -100,6 +112,7 @@ export default function Home() {
             }
           })
         })
+        setMatchedPairs((prevMatchedPairs) => prevMatchedPairs + 1);
         resetTurn();
       } else {
         console.log("Don't match");
@@ -118,7 +131,6 @@ export default function Home() {
   };
 
   const handleChoice = (card: Card) => {
-    setPlayConfetti(true);
     if(card.id === choiceOne?.id) return;
     if (choiceOne) {
       setChoiceTwo(card);
@@ -130,10 +142,17 @@ export default function Home() {
 
   return (
     <>
-   
-    <div className="p-20">
-      <button onClick={duplicateAndShuffleCards} className="mb-8">New Game</button>
-      <div className="cards-container" ref={containerRef}>
+      
+    <div className="p-2">
+    <button onClick={() => {
+  if (!isAudioInitialized) {
+    handlePlayConfetti(0.001); // Initialize the audio with a very low volume
+    setIsAudioInitialized(true);
+  }
+  duplicateAndShuffleCards(currentImages);
+}} className="mb-8">New Game</button>
+
+    <div className='cards-container' >
         {cards.map((card) => (
           <SingleCard key={card.id}
                        card={card}
@@ -147,6 +166,7 @@ export default function Home() {
       <p> Nb essai : { turns } </p>
       
       <Confetti run={playConfetti} />
+      <audio id="confettiAudio" src="/confetti.mp3" /> 
     </div>
     </>
   );
