@@ -1,0 +1,18 @@
+.home-page {
+    position: relative;
+  }
+  
+  .start-button {
+    padding: 10px 20px;
+    font-size: 20px;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .start-button:hover {
+    background-color: #3E8E41;
+  }
+  
