@@ -8,16 +8,33 @@ import SingleCard from '../components/SingleCard';
 import '../components/card.css'
 
 
-const images = [
-  { src: "/m1.png" , matched: false  ,  value : "1"    },
-  { src: "/m2.png" , matched: false  ,   value : "2"    },
-  { src: "/m3.png"  , matched: false   , value : "3"   }  ,
-  { src: "/m4.png"  , matched: false  , value : "4"   },
-  { src: "/m5.png"  , matched: false  , value : "5"   },
+const l1 = [
+  { src: "/sm/sm1.png" , matched: false  ,   value : "1"    },
+  { src: "/sm/sm2.png" , matched: false  ,   value : "2"    },
+  { src: "/sm/sm3.png"  , matched: false  ,  value : "3"   }  ,
+  { src: "/sm/sm4.png"  , matched: false  ,  value : "4"   },
+  { src: "/sm/sm5.png"  , matched: false  ,  value : "5"   }
+  
 ];
 
 
-const newImages = [
+
+const l2 = [
+    { src: "/sm/sm1.png" , matched: false  ,   value : "1"    },
+    { src: "/sm/sm2.png" , matched: false  ,   value : "2"    },
+    { src: "/sm/sm3.png"  , matched: false  ,  value : "3"   }  ,
+    { src: "/sm/sm4.png"  , matched: false  ,  value : "4"   },
+    { src: "/sm/sm5.png"  , matched: false  ,  value : "5"   },
+    { src: "/sm/sm6.png"  , matched: false  ,  value : "6"   },
+     { src: "/sm/sm7.png"  , matched: false  ,  value : "7"   },
+      { src: "/sm/sm8.png"  , matched: false  ,  value : "8"   },
+     { src: "/sm/sm9.png"  , matched: false  ,  value : "9"   },
+     { src: "/sm/sm10.png"  , matched: false  ,  value : "10"   },
+    
+  ];
+  
+
+const l3 = [
   { src: "/op/level21.png", matched: false ,  value : "1" },
   { src: "/op/level22.png", matched: false ,  value : "2" },
   { src: "/op/level23.png", matched: false ,  value : "2" },
@@ -29,7 +46,7 @@ const newImages = [
   { src: "/op/level29.png", matched: false ,  value : "5" },
   { src: "/op/level210.png", matched: false ,  value : "6" },
   { src: "/op/level211.png", matched: false ,  value : "6" },
-  { src: "/op/level211.png", matched: false ,  value : "1" },
+  { src: "/op/level212.png", matched: false ,  value : "1" },
 
 ];
 
@@ -47,7 +64,7 @@ export const Game = () => {
 
 
 
-  const [currentImages, setCurrentImages] = useState(images)
+  const [currentImages, setCurrentImages] = useState(l1)
   const [cards, setCards] = useState<Card[]>([]);
   const [turns, setTurns] = useState(0);
   const [choiceOne, setChoiceOne] = useState<Card | null>(null);
@@ -60,26 +77,43 @@ export const Game = () => {
   const [isAudioInitialized, setIsAudioInitialized] = useState(false);
   const [level,setLevel] = useState(1)
 
+    const [cons,setCons] = useState("debug")
+
+    useEffect(() => {
+        if (matchedPairs === currentImages.length) {
+          handlePlayConfetti();
+          setTimeout(() => {
+            setCons("boom");
+            setGameComplete(true);
+            restartGame(); // Call restartGame when the first level is completed
+          }, 2000);
+        }
+      }, [matchedPairs, currentImages]);
 
 
-  useEffect(() => {
-    if (matchedPairs === images.length) {
-
-      handlePlayConfetti()
-       setTimeout(() => {
-        setGameComplete(false);
-        restartGame();
-      }, 2000);
-    }
-  }, [matchedPairs]);
+      useEffect(() => {
+        duplicateAndShuffleCards();
+      }, [level]);
 
 
-  const restartGame = () => {
-    // Reset all the necessary state variables to start a new game
-    setCurrentImages(newImages)
-    setPlayConfetti(false);
-    duplicateAndShuffleCards(newImages);
-  };
+      useEffect(() => {
+        duplicateAndShuffleCards()
+    
+      },[])
+
+      const restartGame = () => {
+        console.log("VICTOIR ON RESET");
+        if (level === 1) {
+          setCurrentImages(l2);
+          setLevel(2);
+        } else if (level === 2) {
+          setCurrentImages(l3);
+          setLevel(3);
+        }
+        setMatchedPairs(0); // Reset matchedPairs here
+        duplicateAndShuffleCards();
+      };
+  
 
 
   const handlePlayConfetti = (volume = 1) => {
@@ -96,31 +130,24 @@ export const Game = () => {
     audio.play();
       };
 
-  const duplicateAndShuffleCards = (imgs: { src: string; matched: boolean ; value : string }[] = images) => {
-   
-   if  (level===1) { 
-    const melangeC = [...imgs, ...imgs]
-      .sort(() => Math.random() - 0.5)
-      .map((card) => ({ ...card, id: Math.random() }));
-
-    setCards(melangeC);
-   } else {
-    const mc = imgs
-    .sort(() => Math.random() - 0.5)
-    .map((card) => ({ ...card, id: Math.random() }));
-
-    setCards(mc)
-   }
-   
-    setChoiceOne(null);
-    setChoiceTwo(null)
-    setTurns(0);
-  };
-
-  useEffect(() => {
-    duplicateAndShuffleCards()
-
-  },[])
+      const duplicateAndShuffleCards = () => {
+        setCons(String(level));
+        let melangeC = [];
+        if  (!(level === 3)) { 
+          melangeC = [...currentImages, ...currentImages];
+        } else {
+          melangeC = currentImages;
+        }
+      
+        melangeC = melangeC
+          .sort(() => Math.random() - 0.5)
+          .map((card) => ({ ...card, id: Math.random() }));
+      
+        setCards(melangeC);
+        setChoiceOne(null);
+        setChoiceTwo(null);
+        setTurns(0);
+      };
 
 
 
@@ -173,12 +200,13 @@ export const Game = () => {
     <>
       
     <div className="p-2">
+        <div> {cons} </div>
     <button onClick={() => {
   if (!isAudioInitialized) {
     handlePlayConfetti(0.001); // Initialize the audio with a very low volume
     setIsAudioInitialized(true);
   }
-  duplicateAndShuffleCards(currentImages);
+  duplicateAndShuffleCards();
 }} className="mb-8">New Game</button>
 
     <div className='cards-container' >
