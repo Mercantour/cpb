@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Game } from "./game";
-import "./Home.css";
+import "./home.css";
 
 export default function Home() {
   const [startGame, setStartGame] = useState(false);
