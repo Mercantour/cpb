@@ -190,7 +190,7 @@ export const Game = () => {
       </div>
       <div className="flex justify-center mt-4">
         <p className="text-xl text-white">
-          Nombre d'essai{turns > 1 ? "s" : ""}: {turns} 
+          Nombre d&apos;essai{turns > 1 ? "s" : ""}: {turns} 
         </p>
       </div>
       
