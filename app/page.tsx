@@ -11,7 +11,7 @@ export default function Home() {
   };
 
   return (
-    <div className="home-page">
+    <div className="home-page bg-black">
       {!startGame ? (
         <div
           className="start-button-container"
@@ -24,7 +24,7 @@ export default function Home() {
           }}
         >
           <button className="start-button" onClick={handleStartGame}>
-            Let&apos;s Go
+            CPB!!! Are you ready ? Do your best!
           </button>
         </div>
       ) : null}

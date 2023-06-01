@@ -1,13 +1,16 @@
 .cards-container {
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* Set 5 equal columns per line */
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 10px;
     padding: 20px;
     overflow: hidden;
     height: 100%; /* Set the height of the container to 100% */
   }
+  
   .card {
     position: relative;
+    width: 100%; /* Set the width of the card to fill the grid cell */
+    height: 100%; /* Set the height of the card to fill the grid cell */
   }
   
   .card img {
@@ -19,25 +22,24 @@
     border-radius: 6px;
   }
   
-
-.card .front {
+  .card .front {
     transform: rotateY(90deg);
     transition: all ease-in 0.2s;
     position: absolute;
-}
-
-.flipped .front {
+  }
+  
+  .flipped .front {
     transform: rotateY(0deg);
-    transition-delay: 0.2s;    
-}
-
-
-.card .back {
+    transition-delay: 0.2s;
+  }
+  
+  .card .back {
     transition: all ease-in 0.2s;
     transition-delay: 0.2s;
-}
-
-.flipped .back {
+  }
+  
+  .flipped .back {
     transform: rotateY(90deg);
-    transition-delay: 0s
-}
+    transition-delay: 0s;
+  }
+  
