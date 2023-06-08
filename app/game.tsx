@@ -109,6 +109,8 @@ export const Game = () => {
   const [isAudioInitialized, setIsAudioInitialized] = useState(false);
   const [level, setLevel] = useState(1);
 
+  const [nbWrong, setWrong] = useState(1)
+
   useEffect(() => {
     const ratio = level < 3 ? 1 : 2
     if (matchedPairs === currentImages.length / ratio) {
@@ -173,6 +175,13 @@ export const Game = () => {
     audio.play();
   };
 
+
+  const playLego = (volume = 1) => {
+    const audio = document.getElementById("lego") as HTMLAudioElement;
+    audio.volume = volume;
+    audio.play();
+  };
+
   const duplicateAndShuffleCards = () => {
     let melangeC = [];
    
@@ -211,7 +220,13 @@ export const Game = () => {
         resetTurn();
       } else {
         setTimeout(resetTurn, 1000);
-        playWrong()
+        if (nbWrong > 4) {
+          setWrong(1)
+          playWrong()
+        } else {
+          setWrong( nbWrong + 1 )
+          playLego()
+        }
       }
     }
   }, [choiceOne, choiceTwo]);
@@ -270,6 +285,7 @@ export const Game = () => {
       <audio id="confettiAudio" src="/confetti.mp3" />
       <audio id="click" src="/click.mp3" />
       <audio id="wrong" src="/wrong.mp3" />
+      <audio id="lego" src="/lego.mp3" />
     </div>
   );
 };
