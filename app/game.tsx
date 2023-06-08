@@ -219,7 +219,11 @@ export const Game = () => {
         setMatchedPairs((prevMatchedPairs) => prevMatchedPairs + 1);
         resetTurn();
       } else {
-        setTimeout(resetTurn, 1000);
+        if (level==4) {
+        setTimeout(resetTurn, 2000);
+        } else {
+           setTimeout(resetTurn, 1000);
+        }
         if (nbWrong > 4) {
           setWrong(1)
           playWrong()
