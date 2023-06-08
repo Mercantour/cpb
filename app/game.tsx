@@ -42,6 +42,52 @@ const l3 = [
   { src: "/op/level212.png", matched: false, value: "1" }
 ];
 
+
+const l4 = [
+  { src: "/draw/cpb1.png", matched: false, value: "0" },
+  { src: "/draw/cpb1-result.png", matched: false, value: "0" },
+  { src: "/draw/cpb2.png", matched: false, value: "1" },
+  { src: "/draw/cpb8.png", matched: false, value: "1" },
+  { src: "/draw/cpb12.png", matched: false, value: "2" },
+  { src: "/draw/cpb24.png", matched: false, value: "2" },
+  { src: "/draw/cpb30.png", matched: false, value: "3" },
+  { src: "/draw/cpb31.png", matched: false, value: "3" },
+  { src: "/draw/cpb32.png", matched: false, value: "4" },
+  { src: "/draw/cpb33.png", matched: false, value: "4" },
+  { src: "/draw/cpb34.png", matched: false, value: "5" },
+  { src: "/draw/cpb35.png", matched: false, value: "5" },
+  { src: "/draw/cpb36.png", matched: false, value: "7" },
+  { src: "/draw/cpb37.png", matched: false, value: "7" },
+  { src: "/draw/cpb38.png", matched: false, value: "8" },
+  { src: "/draw/cpb39.png", matched: false, value: "8" },
+  { src: "/draw/cpb40.png", matched: false, value: "9" },
+  { src: "/draw/cpb41.png", matched: false, value: "9" },
+  { src: "/draw/cpb42.png", matched: false, value: "10" },
+  { src: "/draw/cpb43.png", matched: false, value: "10" },
+  { src: "/draw/cpb44.png", matched: false, value: "11" },
+  { src: "/draw/cpb45.png", matched: false, value: "11" },
+  { src: "/draw/cpb46.png", matched: false, value: "1" },
+  { src: "/draw/cpb47.png", matched: false, value: "12" },
+  { src: "/draw/cpb48.png", matched: false, value: "12" },
+  { src: "/draw/cpb49.png", matched: false, value: "13" },
+  { src: "/draw/cpb50.png", matched: false, value: "14" },
+  { src: "/draw/cpb51.png", matched: false, value: "14" },
+  { src: "/draw/cpb52.png", matched: false, value: "15" },
+  { src: "/draw/cpb53.png", matched: false, value: "15" },
+  { src: "/draw/cpb54.png", matched: false, value: "16" },
+  { src: "/draw/cpb55.png", matched: false, value: "16" },
+  { src: "/draw/cpb56.png", matched: false, value: "17" },
+  { src: "/draw/cpb57.png", matched: false, value: "17" },
+  { src: "/draw/cpb58.png", matched: false, value: "18" },
+  { src: "/draw/cpb59.png", matched: false, value: "18" },
+  { src: "/draw/cpb60.png", matched: false, value: "13" },
+  { src: "/draw/cpb61.png", matched: false, value: "19" },
+  { src: "/draw/cpb62.png", matched: false, value: "19" },
+  { src: "/draw/mia.png", matched: false, value: "34" },
+  { src: "/draw/miaC.png", matched: false, value: "34" },
+ 
+];
+
 interface Card {
   id: number;
   src: string;
@@ -91,8 +137,11 @@ export const Game = () => {
       setCurrentImages(l3);
       setLevel(3);
     } else if (level === 3) {
+    
+      setCurrentImages(l4);
+      setLevel(4);
+    }  else if (level === 3) {
       setGameComplete(true);
-
     }
     setMatchedPairs(0);
     duplicateAndShuffleCards();
@@ -120,7 +169,9 @@ export const Game = () => {
 
   const duplicateAndShuffleCards = () => {
     let melangeC = [];
-    if (!(level === 3)) {
+   
+    
+    if (level < 3 ) {
       melangeC = [...currentImages, ...currentImages];
     } else {
       melangeC = currentImages;
