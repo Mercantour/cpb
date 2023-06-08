@@ -24,7 +24,7 @@ export default function Home() {
           }}
         >
           <button className="start-button" onClick={handleStartGame}>
-            CPB!!! Are you ready ? Do your best!
+            CPB!!! Are you ready ? 
           </button>
         </div>
       ) : null}
