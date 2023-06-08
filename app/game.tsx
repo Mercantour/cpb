@@ -167,6 +167,12 @@ export const Game = () => {
     audio.play();
   };
 
+  const playWrong = (volume = 1) => {
+    const audio = document.getElementById("wrong") as HTMLAudioElement;
+    audio.volume = volume;
+    audio.play();
+  };
+
   const duplicateAndShuffleCards = () => {
     let melangeC = [];
    
@@ -205,6 +211,7 @@ export const Game = () => {
         resetTurn();
       } else {
         setTimeout(resetTurn, 1000);
+        playWrong()
       }
     }
   }, [choiceOne, choiceTwo]);
@@ -262,6 +269,7 @@ export const Game = () => {
       <Confetti run={playConfetti} />
       <audio id="confettiAudio" src="/confetti.mp3" />
       <audio id="click" src="/click.mp3" />
+      <audio id="wrong" src="/wrong.mp3" />
     </div>
   );
 };
